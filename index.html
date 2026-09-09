@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ㄴㄴㅂ 전투 계산기</title>
+
   <style>
     :root {
       --bg: #f5f7fa;
@@ -18,17 +19,23 @@
       --radius: 22px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,.95), transparent 32%),
-        var(--bg);
+      background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-                   "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple SD Gothic Neo",
+        "Pretendard",
+        "Noto Sans KR",
+        "Segoe UI",
+        sans-serif;
     }
 
     .wrap {
@@ -82,13 +89,12 @@
       display: grid;
       place-items: center;
       background: var(--accent);
-      color: #fff;
+      color: white;
       font-weight: 800;
     }
 
     .name-input {
       width: 100%;
-      min-width: 0;
       border: 0;
       outline: 0;
       background: transparent;
@@ -105,7 +111,7 @@
       font-size: 12px;
       font-weight: 800;
       color: var(--muted);
-      letter-spacing: .06em;
+      letter-spacing: 0.06em;
       margin: 4px 0 10px;
     }
 
@@ -140,12 +146,6 @@
       outline: none;
       font-size: 16px;
       color: var(--text);
-      transition: .16s ease;
-    }
-
-    input[type="number"]:focus,
-    .name-input:focus {
-      border-color: #bfc5ce;
     }
 
     .suffix {
@@ -164,7 +164,7 @@
       gap: 8px;
     }
 
-    .resist-grid .field label {
+    .resist-grid label {
       text-align: center;
     }
 
@@ -207,22 +207,16 @@
       justify-content: center;
       min-height: 42px;
       border-radius: 10px;
-      background: transparent;
-      color: var(--muted);
       padding: 11px 8px;
-      font-size: 14px;
-      font-weight: 800;
       cursor: pointer;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      transition: .16s ease;
+      transition: 0.15s ease;
     }
 
     .segmented input[type="radio"]:checked + label {
-      background: #fff;
+      background: white;
       color: var(--text);
-      box-shadow: 0 2px 10px rgba(17,24,39,.08);
+      box-shadow: 0 2px 10px rgba(17, 24, 39, 0.08);
     }
 
     .calculate {
@@ -236,11 +230,6 @@
       font-size: 16px;
       font-weight: 900;
       cursor: pointer;
-      transition: transform .1s ease, opacity .15s ease;
-    }
-
-    .calculate:active {
-      transform: scale(.992);
     }
 
     .result {
@@ -254,10 +243,6 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-    }
-
-    .result-item {
-      min-width: 0;
     }
 
     .result-item + .result-item {
@@ -274,9 +259,31 @@
     .result-value {
       font-size: clamp(34px, 7vw, 54px);
       font-weight: 900;
-      letter-spacing: -0.045em;
       line-height: 1;
-      overflow-wrap: anywhere;
+    }
+
+    .outcome {
+      margin-top: 14px;
+      padding: 18px 20px;
+      text-align: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .outcome.success {
+      color: #166534;
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+
+    .outcome.fail {
+      color: #991b1b;
+      border-color: #fecaca;
+      background: #fef2f2;
     }
 
     .error {
@@ -296,17 +303,8 @@
     }
 
     @media (max-width: 760px) {
-      .wrap {
-        width: min(100% - 20px, 620px);
-        padding-top: 22px;
-      }
-
       .characters {
         grid-template-columns: 1fr;
-      }
-
-      .field-grid {
-        grid-template-columns: 1fr 1fr;
       }
 
       .resist-grid {
@@ -335,267 +333,677 @@
     }
   </style>
 </head>
+
 <body>
   <main class="wrap">
+
     <header>
       <h1>ㄴㄴㅂ 전투 계산기</h1>
-      <div class="subtitle">수치 입력 → 공격 방향과 속성 선택 → 결과 확인</div>
+      <div class="subtitle">
+        수치 입력 → 공격 방향/속성 선택 → 공격 판정
+      </div>
     </header>
 
     <section class="characters">
-      <article class="card" data-char="A">
+
+      <!-- A -->
+      <article class="card">
         <div class="card-head">
           <div class="badge">A</div>
-          <input class="name-input" id="nameA" type="text" value="A" aria-label="A 이름" />
+          <input
+            class="name-input"
+            id="nameA"
+            type="text"
+            value="A"
+          />
         </div>
+
         <div class="card-body">
+
           <div class="section-title">전투 수치</div>
+
           <div class="field-grid">
+
             <div class="field">
-              <label for="levelA">레벨</label>
-              <input id="levelA" type="number" min="0" step="1" value="1" />
+              <label>레벨</label>
+              <input id="levelA" type="number" value="1" min="0" />
             </div>
+
             <div class="field">
-              <label for="weaponA">무기 피해</label>
-              <input id="weaponA" type="number" step="1" value="0" />
+              <label>무기 피해</label>
+              <input id="weaponA" type="number" value="0" />
             </div>
+
             <div class="field">
-              <label for="successA">성공률</label>
+              <label>성공률</label>
+
               <div class="input-wrap">
-                <input id="successA" type="number" min="0" max="100" step="0.1" placeholder="미입력 = 100" />
+                <input
+                  id="successA"
+                  type="number"
+                  min="0"
+                  max="100"
+                  placeholder="100"
+                />
+
                 <span class="suffix">%</span>
               </div>
             </div>
+
             <div class="field">
-              <label for="defenseA">방어력</label>
-              <input id="defenseA" type="number" min="0" step="1" value="0" />
+              <label>방어력</label>
+              <input id="defenseA" type="number" value="0" min="0" />
             </div>
+
           </div>
 
-          <div class="section-title" style="margin-top:18px;">내성 계수</div>
-          <div class="resist-grid">
-            <div class="field">
-              <label for="weaponResA">병기</label>
-              <input id="weaponResA" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="fireResA">화기</label>
-              <input id="fireResA" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="magicResA">마법</label>
-              <input id="magicResA" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="holyResA">신성</label>
-              <input id="holyResA" type="number" min="0" step="0.1" value="1.0" />
-            </div>
+          <div class="section-title" style="margin-top:18px;">
+            내성 계수
           </div>
+
+          <div class="resist-grid">
+
+            <div class="field">
+              <label>병기</label>
+              <input id="weaponResA" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>화기</label>
+              <input id="fireResA" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>마법</label>
+              <input id="magicResA" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>신성</label>
+              <input id="holyResA" type="number" step="0.1" value="1.0" />
+            </div>
+
+          </div>
+
         </div>
       </article>
 
-      <article class="card" data-char="B">
+
+      <!-- B -->
+      <article class="card">
+
         <div class="card-head">
           <div class="badge">B</div>
-          <input class="name-input" id="nameB" type="text" value="B" aria-label="B 이름" />
+
+          <input
+            class="name-input"
+            id="nameB"
+            type="text"
+            value="B"
+          />
         </div>
+
         <div class="card-body">
+
           <div class="section-title">전투 수치</div>
+
           <div class="field-grid">
+
             <div class="field">
-              <label for="levelB">레벨</label>
-              <input id="levelB" type="number" min="0" step="1" value="1" />
+              <label>레벨</label>
+              <input id="levelB" type="number" value="1" min="0" />
             </div>
+
             <div class="field">
-              <label for="weaponB">무기 피해</label>
-              <input id="weaponB" type="number" step="1" value="0" />
+              <label>무기 피해</label>
+              <input id="weaponB" type="number" value="0" />
             </div>
+
             <div class="field">
-              <label for="successB">성공률</label>
+              <label>성공률</label>
+
               <div class="input-wrap">
-                <input id="successB" type="number" min="0" max="100" step="0.1" placeholder="미입력 = 100" />
+                <input
+                  id="successB"
+                  type="number"
+                  min="0"
+                  max="100"
+                  placeholder="100"
+                />
+
                 <span class="suffix">%</span>
               </div>
             </div>
+
             <div class="field">
-              <label for="defenseB">방어력</label>
-              <input id="defenseB" type="number" min="0" step="1" value="0" />
+              <label>방어력</label>
+              <input id="defenseB" type="number" value="0" min="0" />
             </div>
+
           </div>
 
-          <div class="section-title" style="margin-top:18px;">내성 계수</div>
-          <div class="resist-grid">
-            <div class="field">
-              <label for="weaponResB">병기</label>
-              <input id="weaponResB" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="fireResB">화기</label>
-              <input id="fireResB" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="magicResB">마법</label>
-              <input id="magicResB" type="number" min="0" step="0.1" value="1.0" />
-            </div>
-            <div class="field">
-              <label for="holyResB">신성</label>
-              <input id="holyResB" type="number" min="0" step="0.1" value="1.0" />
-            </div>
+
+          <div class="section-title" style="margin-top:18px;">
+            내성 계수
           </div>
+
+          <div class="resist-grid">
+
+            <div class="field">
+              <label>병기</label>
+              <input id="weaponResB" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>화기</label>
+              <input id="fireResB" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>마법</label>
+              <input id="magicResB" type="number" step="0.1" value="1.0" />
+            </div>
+
+            <div class="field">
+              <label>신성</label>
+              <input id="holyResB" type="number" step="0.1" value="1.0" />
+            </div>
+
+          </div>
+
         </div>
       </article>
+
     </section>
 
+
+    <!-- 공격 설정 -->
     <section class="card controls">
-      <div class="control-block">
-        <div class="section-title">공격 방향</div>
-        <div class="segmented" id="directionGroup">
-          <input type="radio" name="direction" id="dirAtoB" value="AtoB" checked />
-          <label for="dirAtoB"><span id="dirAtoBText">A → B</span></label>
-
-          <input type="radio" name="direction" id="dirBtoA" value="BtoA" />
-          <label for="dirBtoA"><span id="dirBtoAText">B → A</span></label>
-        </div>
-      </div>
 
       <div class="control-block">
-        <div class="section-title">공격 속성</div>
-        <div class="segmented four" id="typeGroup">
-          <input type="radio" name="attackType" id="typeWeapon" value="weapon" checked />
-          <label for="typeWeapon">병기</label>
 
-          <input type="radio" name="attackType" id="typeFire" value="fire" />
-          <label for="typeFire">화기</label>
-
-          <input type="radio" name="attackType" id="typeMagic" value="magic" />
-          <label for="typeMagic">마법</label>
-
-          <input type="radio" name="attackType" id="typeHoly" value="holy" />
-          <label for="typeHoly">신성</label>
+        <div class="section-title">
+          공격 방향
         </div>
+
+        <div class="segmented">
+
+          <input
+            type="radio"
+            name="direction"
+            id="dirAtoB"
+            value="AtoB"
+            checked
+          />
+
+          <label for="dirAtoB">
+            <span id="dirAtoBText">
+              A → B
+            </span>
+          </label>
+
+
+          <input
+            type="radio"
+            name="direction"
+            id="dirBtoA"
+            value="BtoA"
+          />
+
+          <label for="dirBtoA">
+            <span id="dirBtoAText">
+              B → A
+            </span>
+          </label>
+
+        </div>
+
       </div>
 
-      <button class="calculate" id="calculateBtn" type="button">계산하기</button>
-      <div class="error" id="errorMsg" aria-live="polite"></div>
+
+      <div class="control-block">
+
+        <div class="section-title">
+          공격 속성
+        </div>
+
+        <div class="segmented four">
+
+          <input
+            type="radio"
+            name="attackType"
+            id="typeWeapon"
+            value="weapon"
+            checked
+          />
+
+          <label for="typeWeapon">
+            병기
+          </label>
+
+
+          <input
+            type="radio"
+            name="attackType"
+            id="typeFire"
+            value="fire"
+          />
+
+          <label for="typeFire">
+            화기
+          </label>
+
+
+          <input
+            type="radio"
+            name="attackType"
+            id="typeMagic"
+            value="magic"
+          />
+
+          <label for="typeMagic">
+            마법
+          </label>
+
+
+          <input
+            type="radio"
+            name="attackType"
+            id="typeHoly"
+            value="holy"
+          />
+
+          <label for="typeHoly">
+            신성
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="calculate"
+        id="calculateBtn"
+      >
+        계산하기
+      </button>
+
+      <div
+        class="error"
+        id="errorMsg"
+      ></div>
+
     </section>
 
-    <section class="result" aria-live="polite">
+
+    <!-- 결과 -->
+    <section class="result">
+
       <div class="result-item">
-        <div class="result-label">최종 피해</div>
-        <div class="result-value" id="damageResult">0</div>
+
+        <div class="result-label">
+          실제 피해
+        </div>
+
+        <div
+          class="result-value"
+          id="damageResult"
+        >
+          0
+        </div>
+
       </div>
+
+
       <div class="result-item">
-        <div class="result-label">성공률</div>
-        <div class="result-value" id="successResult">100%</div>
+
+        <div class="result-label">
+          성공률
+        </div>
+
+        <div
+          class="result-value"
+          id="successResult"
+        >
+          100%
+        </div>
+
       </div>
+
     </section>
 
-    <div class="tiny">기본 피해 = 레벨 × 10 · 성공률 미입력 시 100%</div>
+
+    <section
+      class="outcome"
+      id="outcomeResult"
+    >
+      판정 대기
+    </section>
+
+
+    <div class="tiny">
+      기본 피해 = 레벨 × 10
+    </div>
+
   </main>
 
-  <script>
-    const damageResult = document.getElementById("damageResult");
-    const successResult = document.getElementById("successResult");
-    const errorMsg = document.getElementById("errorMsg");
 
-    function value(id, fallback = 0) {
-      const raw = document.getElementById(id).value.trim();
-      if (raw === "") return fallback;
-      const n = Number(raw);
-      return Number.isFinite(n) ? n : NaN;
+  <script>
+
+    const damageResult =
+      document.getElementById("damageResult");
+
+    const successResult =
+      document.getElementById("successResult");
+
+    const outcomeResult =
+      document.getElementById("outcomeResult");
+
+    const errorMsg =
+      document.getElementById("errorMsg");
+
+
+    function getValue(id, fallback = 0) {
+
+      const input =
+        document.getElementById(id);
+
+      const raw =
+        input.value.trim();
+
+      if (raw === "") {
+        return fallback;
+      }
+
+      return Number(raw);
     }
+
 
     function getCharacter(key) {
+
       return {
-        level: value(`level${key}`),
-        weaponDamage: value(`weapon${key}`),
-        success: value(`success${key}`, 100),
-        defense: value(`defense${key}`),
+
+        level:
+          getValue(`level${key}`),
+
+        weaponDamage:
+          getValue(`weapon${key}`),
+
+        success:
+          getValue(`success${key}`, 100),
+
+        defense:
+          getValue(`defense${key}`),
+
         resist: {
-          weapon: value(`weaponRes${key}`, 1),
-          fire: value(`fireRes${key}`, 1),
-          magic: value(`magicRes${key}`, 1),
-          holy: value(`holyRes${key}`, 1)
+
+          weapon:
+            getValue(`weaponRes${key}`, 1),
+
+          fire:
+            getValue(`fireRes${key}`, 1),
+
+          magic:
+            getValue(`magicRes${key}`, 1),
+
+          holy:
+            getValue(`holyRes${key}`, 1)
+
         }
+
       };
+
     }
 
-    function formatNumber(n) {
-      if (Number.isInteger(n)) return n.toLocaleString("ko-KR");
-      return Number(n.toFixed(2)).toLocaleString("ko-KR");
+
+    function formatNumber(number) {
+
+      if (Number.isInteger(number)) {
+
+        return number.toLocaleString("ko-KR");
+
+      }
+
+      return Number(
+        number.toFixed(2)
+      ).toLocaleString("ko-KR");
+
     }
 
-    function validate(c, label) {
-      const vals = [
-        c.level, c.weaponDamage, c.success, c.defense,
-        c.resist.weapon, c.resist.fire, c.resist.magic, c.resist.holy
-      ];
-
-      if (vals.some(v => Number.isNaN(v))) {
-        throw new Error(`${label}의 입력값을 확인해줘.`);
-      }
-      if (c.level < 0 || c.defense < 0) {
-        throw new Error(`${label}의 레벨·방어력은 0 이상이어야 해.`);
-      }
-      if (c.success < 0 || c.success > 100) {
-        throw new Error(`${label}의 성공률은 0~100 사이여야 해.`);
-      }
-      if (Object.values(c.resist).some(v => v < 0)) {
-        throw new Error(`${label}의 내성 계수는 0 이상이어야 해.`);
-      }
-    }
 
     function calculate() {
-      try {
-        errorMsg.textContent = "";
 
-        const A = getCharacter("A");
-        const B = getCharacter("B");
-        validate(A, "A");
-        validate(B, "B");
+      errorMsg.textContent = "";
 
-        const direction = document.querySelector('input[name="direction"]:checked').value;
-        const attackType = document.querySelector('input[name="attackType"]:checked').value;
 
-        const attacker = direction === "AtoB" ? A : B;
-        const defender = direction === "AtoB" ? B : A;
+      const A =
+        getCharacter("A");
 
-        const basicDamage = attacker.level * 10;
-        const rawDamage = basicDamage + attacker.weaponDamage;
-        const afterDefense = Math.max(0, rawDamage - defender.defense);
-        const resistance = defender.resist[attackType];
-        const finalDamage = afterDefense * resistance;
+      const B =
+        getCharacter("B");
 
-        damageResult.textContent = formatNumber(finalDamage);
-        successResult.textContent = `${formatNumber(attacker.success)}%`;
-      } catch (err) {
-        errorMsg.textContent = err.message;
+
+      const direction =
+        document.querySelector(
+          'input[name="direction"]:checked'
+        ).value;
+
+
+      const attackType =
+        document.querySelector(
+          'input[name="attackType"]:checked'
+        ).value;
+
+
+      const attacker =
+        direction === "AtoB"
+          ? A
+          : B;
+
+
+      const defender =
+        direction === "AtoB"
+          ? B
+          : A;
+
+
+      /*
+        기본 피해
+
+        LV 1 = 10
+        LV 2 = 20
+        LV 3 = 30
+        ...
+      */
+
+      const basicDamage =
+        attacker.level * 10;
+
+
+      /*
+        기본 피해 + 무기 피해
+      */
+
+      const rawDamage =
+        basicDamage +
+        attacker.weaponDamage;
+
+
+      /*
+        방어력 차감
+
+        피해보다 방어력이 높으면
+        최소 0
+      */
+
+      const afterDefense =
+        Math.max(
+          0,
+          rawDamage -
+          defender.defense
+        );
+
+
+      /*
+        상대의 해당 속성
+        내성 계수
+      */
+
+      const resistance =
+        defender.resist[
+          attackType
+        ];
+
+
+      /*
+        공격 성공 시 들어갈 피해
+      */
+
+      const successDamage =
+        afterDefense *
+        resistance;
+
+
+      /*
+        성공률 판정
+
+        예:
+
+        성공률 70
+        랜덤값 0~100
+
+        70 미만이면 성공
+      */
+
+      const roll =
+        Math.random() * 100;
+
+
+      const succeeded =
+        roll <
+        attacker.success;
+
+
+      /*
+        성공 = 정상 피해
+        실패 = 0 피해
+      */
+
+      const actualDamage =
+        succeeded
+          ? successDamage
+          : 0;
+
+
+      damageResult.textContent =
+        formatNumber(
+          actualDamage
+        );
+
+
+      successResult.textContent =
+        `${formatNumber(
+          attacker.success
+        )}%`;
+
+
+      if (succeeded) {
+
+        outcomeResult.textContent =
+          "공격 성공";
+
+        outcomeResult.classList.remove(
+          "fail"
+        );
+
+        outcomeResult.classList.add(
+          "success"
+        );
+
       }
+
+      else {
+
+        outcomeResult.textContent =
+          "공격 실패";
+
+        outcomeResult.classList.remove(
+          "success"
+        );
+
+        outcomeResult.classList.add(
+          "fail"
+        );
+
+      }
+
     }
 
-    function updateDirectionLabels() {
-      const nameA = document.getElementById("nameA").value.trim() || "A";
-      const nameB = document.getElementById("nameB").value.trim() || "B";
-      document.getElementById("dirAtoBText").textContent = `${nameA} → ${nameB}`;
-      document.getElementById("dirBtoAText").textContent = `${nameB} → ${nameA}`;
+
+    function updateDirectionNames() {
+
+      const nameA =
+        document
+          .getElementById("nameA")
+          .value
+          .trim() || "A";
+
+
+      const nameB =
+        document
+          .getElementById("nameB")
+          .value
+          .trim() || "B";
+
+
+      document
+        .getElementById(
+          "dirAtoBText"
+        )
+        .textContent =
+          `${nameA} → ${nameB}`;
+
+
+      document
+        .getElementById(
+          "dirBtoAText"
+        )
+        .textContent =
+          `${nameB} → ${nameA}`;
+
     }
 
-    document.getElementById("nameA").addEventListener("input", updateDirectionLabels);
-    document.getElementById("nameB").addEventListener("input", updateDirectionLabels);
-    document.getElementById("calculateBtn").addEventListener("click", calculate);
 
-    document.querySelectorAll('input[name="direction"], input[name="attackType"]').forEach((input) => {
-      input.addEventListener("change", calculate);
-    });
+    document
+      .getElementById("nameA")
+      .addEventListener(
+        "input",
+        updateDirectionNames
+      );
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && e.target.tagName === "INPUT") {
-        calculate();
-      }
-    });
 
-    updateDirectionLabels();
-    calculate();
+    document
+      .getElementById("nameB")
+      .addEventListener(
+        "input",
+        updateDirectionNames
+      );
+
+
+    document
+      .getElementById(
+        "calculateBtn"
+      )
+      .addEventListener(
+        "click",
+        calculate
+      );
+
+
+    updateDirectionNames();
+
   </script>
+
 </body>
 </html>
