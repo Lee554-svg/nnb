@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f7fa">
+
   <title>ㄴㄴㅂ 전투 계산기</title>
 
   <style>
     :root {
       --bg: #f5f7fa;
       --panel: #ffffff;
-      --panel-soft: #f9fafb;
+      --soft: #f9fafb;
       --text: #111827;
       --muted: #6b7280;
       --line: #e5e7eb;
       --accent: #111827;
-      --accent-soft: #eef1f5;
-      --shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
-      --radius: 22px;
+
+      --green: #166534;
+      --green-bg: #f0fdf4;
+      --green-line: #bbf7d0;
+
+      --orange: #9a3412;
+      --orange-bg: #fff7ed;
+      --orange-line: #fed7aa;
+
+      --red: #991b1b;
+      --red-bg: #fef2f2;
+      --red-line: #fecaca;
+
+      --radius: 20px;
+      --shadow: 0 12px 35px rgba(17, 24, 39, 0.08);
     }
 
     * {
@@ -28,29 +42,34 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Apple SD Gothic Neo",
         "Pretendard",
         "Noto Sans KR",
-        "Segoe UI",
         sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
     }
 
     .wrap {
       width: min(1040px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 38px 0 56px;
+      padding: 34px 0 56px;
     }
 
     header {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(24px, 4vw, 34px);
+      font-size: clamp(26px, 4vw, 34px);
       letter-spacing: -0.04em;
     }
 
@@ -75,32 +94,44 @@
     }
 
     .card-head {
-      padding: 18px 20px 14px;
-      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       gap: 10px;
+
+      padding: 18px 20px 14px;
+
+      border-bottom: 1px solid var(--line);
     }
 
     .badge {
+      flex: 0 0 auto;
+
       width: 34px;
       height: 34px;
-      border-radius: 11px;
+
       display: grid;
       place-items: center;
+
+      border-radius: 11px;
+
       background: var(--accent);
       color: white;
-      font-weight: 800;
+
+      font-weight: 900;
     }
 
     .name-input {
       width: 100%;
+
       border: 0;
       outline: 0;
+
       background: transparent;
-      font-size: 18px;
-      font-weight: 800;
+
       color: var(--text);
+
+      font-size: 18px;
+      font-weight: 900;
     }
 
     .card-body {
@@ -108,16 +139,20 @@
     }
 
     .section-title {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--muted);
-      letter-spacing: 0.06em;
       margin: 4px 0 10px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+      font-weight: 900;
+
+      letter-spacing: 0.06em;
     }
 
     .field-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 10px 12px;
     }
 
@@ -128,39 +163,61 @@
     }
 
     label {
-      font-size: 13px;
       color: var(--muted);
-      font-weight: 700;
+
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    input[type="number"] {
+      width: 100%;
+
+      padding: 11px 12px;
+
+      border: 1px solid var(--line);
+      border-radius: 12px;
+
+      outline: none;
+
+      background: var(--soft);
+
+      color: var(--text);
+
+      font-size: 16px;
+    }
+
+    input[type="number"]:focus {
+      background: white;
+      border-color: #b8bec8;
+
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.05);
     }
 
     .input-wrap {
       position: relative;
     }
 
-    input[type="number"] {
-      width: 100%;
-      border: 1px solid var(--line);
-      background: var(--panel-soft);
-      border-radius: 12px;
-      padding: 11px 12px;
-      outline: none;
-      font-size: 16px;
-      color: var(--text);
+    .percent-input {
+      padding-right: 34px !important;
     }
 
     .suffix {
       position: absolute;
+
       right: 12px;
       top: 50%;
+
       transform: translateY(-50%);
+
       color: var(--muted);
-      font-size: 13px;
+
       pointer-events: none;
     }
 
     .resist-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+
       gap: 8px;
     }
 
@@ -170,7 +227,6 @@
 
     .resist-grid input {
       text-align: center;
-      padding-inline: 7px;
     }
 
     .controls {
@@ -184,10 +240,14 @@
 
     .segmented {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
+
       gap: 8px;
+
       padding: 6px;
-      background: var(--accent-soft);
+
+      background: #eef1f5;
+
       border-radius: 15px;
     }
 
@@ -195,8 +255,9 @@
       grid-template-columns: repeat(4, 1fr);
     }
 
-    .segmented input[type="radio"] {
+    .segmented input {
       position: absolute;
+
       opacity: 0;
       pointer-events: none;
     }
@@ -205,44 +266,130 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       min-height: 42px;
+
+      padding: 10px 8px;
+
       border-radius: 10px;
-      padding: 11px 8px;
+
       cursor: pointer;
       user-select: none;
-      transition: 0.15s ease;
+
+      transition: 0.15s;
     }
 
-    .segmented input[type="radio"]:checked + label {
+    .segmented input:checked + label {
       background: white;
+
       color: var(--text);
-      box-shadow: 0 2px 10px rgba(17, 24, 39, 0.08);
+
+      box-shadow:
+        0 2px 10px rgba(17, 24, 39, 0.08);
+    }
+
+    .attack-rate {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 8px;
+    }
+
+    .rate {
+      padding: 12px 8px;
+
+      background: var(--soft);
+
+      border: 1px solid var(--line);
+      border-radius: 12px;
+
+      text-align: center;
+    }
+
+    .rate strong {
+      display: block;
+
+      margin-bottom: 3px;
+
+      font-size: 17px;
+    }
+
+    .rate span {
+      color: var(--muted);
+
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+
+      gap: 10px;
+
+      margin-top: 20px;
+    }
+
+    button {
+      min-height: 50px;
+
+      border: 0;
+      border-radius: 14px;
+
+      cursor: pointer;
+
+      font-weight: 900;
     }
 
     .calculate {
-      width: 100%;
-      margin-top: 20px;
-      border: 0;
-      border-radius: 14px;
-      padding: 15px 18px;
       background: var(--accent);
       color: white;
+
       font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
+    }
+
+    .reset {
+      padding: 0 20px;
+
+      background: #eef1f5;
+      color: var(--text);
+    }
+
+    button:active {
+      transform: scale(0.99);
+    }
+
+    .error {
+      min-height: 18px;
+
+      margin-top: 10px;
+
+      color: var(--red);
+
+      text-align: center;
+
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .result {
-      margin-top: 18px;
-      padding: 28px 22px;
-      text-align: center;
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 14px;
+
+      margin-top: 18px;
+
+      padding: 26px 22px;
+
       background: var(--panel);
+
       border: 1px solid var(--line);
       border-radius: var(--radius);
+
       box-shadow: var(--shadow);
+
+      text-align: center;
     }
 
     .result-item + .result-item {
@@ -250,69 +397,94 @@
     }
 
     .result-label {
+      margin-bottom: 8px;
+
       color: var(--muted);
+
       font-size: 13px;
       font-weight: 800;
-      margin-bottom: 8px;
     }
 
     .result-value {
       font-size: clamp(34px, 7vw, 54px);
-      font-weight: 900;
-      line-height: 1;
+      font-weight: 950;
+
+      letter-spacing: -0.04em;
     }
 
     .outcome {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 64px;
+
       margin-top: 14px;
-      padding: 18px 20px;
-      text-align: center;
-      background: var(--panel);
+      padding: 18px;
+
+      background: white;
+
       border: 1px solid var(--line);
       border-radius: 16px;
+
       box-shadow: var(--shadow);
-      font-size: 20px;
-      font-weight: 900;
+
+      font-size: 21px;
+      font-weight: 950;
     }
 
-    .outcome.success {
-      color: #166534;
-      border-color: #bbf7d0;
-      background: #f0fdf4;
+    .outcome.normal {
+      color: var(--green);
+
+      background: var(--green-bg);
+
+      border-color: var(--green-line);
+    }
+
+    .outcome.critical {
+      color: var(--orange);
+
+      background: var(--orange-bg);
+
+      border-color: var(--orange-line);
     }
 
     .outcome.fail {
-      color: #991b1b;
-      border-color: #fecaca;
-      background: #fef2f2;
-    }
+      color: var(--red);
 
-    .error {
-      margin-top: 12px;
-      min-height: 18px;
-      text-align: center;
-      color: #b42318;
-      font-size: 13px;
-      font-weight: 700;
+      background: var(--red-bg);
+
+      border-color: var(--red-line);
     }
 
     .tiny {
-      margin-top: 16px;
+      margin-top: 14px;
+
       color: var(--muted);
-      font-size: 12px;
+
       text-align: center;
+
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     @media (max-width: 760px) {
+      .wrap {
+        width: min(100% - 20px, 620px);
+
+        padding-top: 22px;
+      }
+
       .characters {
         grid-template-columns: 1fr;
       }
 
       .resist-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
       }
 
       .segmented.four {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -326,462 +498,1046 @@
       }
 
       .result-item + .result-item {
+        padding-top: 18px;
+
         border-left: 0;
         border-top: 1px solid var(--line);
-        padding-top: 18px;
+      }
+
+      .attack-rate {
+        grid-template-columns: 1fr;
+      }
+
+      .button-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 
+
 <body>
-  <main class="wrap">
 
-    <header>
-      <h1>ㄴㄴㅂ 전투 계산기</h1>
-      <div class="subtitle">
-        수치 입력 → 공격 방향/속성 선택 → 공격 판정
+<main class="wrap">
+
+  <header>
+    <h1>ㄴㄴㅂ 전투 계산기</h1>
+
+    <div class="subtitle">
+      수치 입력 → 성공률 판정 → 공격률 판정 → 피해 계산
+    </div>
+  </header>
+
+
+  <section class="characters">
+
+    <!-- A -->
+
+    <article class="card">
+
+      <div class="card-head">
+
+        <div class="badge">
+          A
+        </div>
+
+        <input
+          class="name-input save"
+          id="nameA"
+          type="text"
+          value="A"
+        >
+
       </div>
-    </header>
-
-    <section class="characters">
-
-      <!-- A -->
-      <article class="card">
-        <div class="card-head">
-          <div class="badge">A</div>
-          <input
-            class="name-input"
-            id="nameA"
-            type="text"
-            value="A"
-          />
-        </div>
-
-        <div class="card-body">
-
-          <div class="section-title">전투 수치</div>
-
-          <div class="field-grid">
-
-            <div class="field">
-              <label>레벨</label>
-              <input id="levelA" type="number" value="1" min="0" />
-            </div>
-
-            <div class="field">
-              <label>무기 피해</label>
-              <input id="weaponA" type="number" value="0" />
-            </div>
-
-            <div class="field">
-              <label>성공률</label>
-
-              <div class="input-wrap">
-                <input
-                  id="successA"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="100"
-                />
-
-                <span class="suffix">%</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>방어력</label>
-              <input id="defenseA" type="number" value="0" min="0" />
-            </div>
-
-          </div>
-
-          <div class="section-title" style="margin-top:18px;">
-            내성 계수
-          </div>
-
-          <div class="resist-grid">
-
-            <div class="field">
-              <label>병기</label>
-              <input id="weaponResA" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>화기</label>
-              <input id="fireResA" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>마법</label>
-              <input id="magicResA" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>신성</label>
-              <input id="holyResA" type="number" step="0.1" value="1.0" />
-            </div>
-
-          </div>
-
-        </div>
-      </article>
 
 
-      <!-- B -->
-      <article class="card">
-
-        <div class="card-head">
-          <div class="badge">B</div>
-
-          <input
-            class="name-input"
-            id="nameB"
-            type="text"
-            value="B"
-          />
-        </div>
-
-        <div class="card-body">
-
-          <div class="section-title">전투 수치</div>
-
-          <div class="field-grid">
-
-            <div class="field">
-              <label>레벨</label>
-              <input id="levelB" type="number" value="1" min="0" />
-            </div>
-
-            <div class="field">
-              <label>무기 피해</label>
-              <input id="weaponB" type="number" value="0" />
-            </div>
-
-            <div class="field">
-              <label>성공률</label>
-
-              <div class="input-wrap">
-                <input
-                  id="successB"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="100"
-                />
-
-                <span class="suffix">%</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>방어력</label>
-              <input id="defenseB" type="number" value="0" min="0" />
-            </div>
-
-          </div>
-
-
-          <div class="section-title" style="margin-top:18px;">
-            내성 계수
-          </div>
-
-          <div class="resist-grid">
-
-            <div class="field">
-              <label>병기</label>
-              <input id="weaponResB" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>화기</label>
-              <input id="fireResB" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>마법</label>
-              <input id="magicResB" type="number" step="0.1" value="1.0" />
-            </div>
-
-            <div class="field">
-              <label>신성</label>
-              <input id="holyResB" type="number" step="0.1" value="1.0" />
-            </div>
-
-          </div>
-
-        </div>
-      </article>
-
-    </section>
-
-
-    <!-- 공격 설정 -->
-    <section class="card controls">
-
-      <div class="control-block">
+      <div class="card-body">
 
         <div class="section-title">
-          공격 방향
+          전투 수치
         </div>
 
-        <div class="segmented">
 
-          <input
-            type="radio"
-            name="direction"
-            id="dirAtoB"
-            value="AtoB"
-            checked
-          />
+        <div class="field-grid">
 
-          <label for="dirAtoB">
-            <span id="dirAtoBText">
-              A → B
-            </span>
-          </label>
+          <div class="field">
+
+            <label for="levelA">
+              레벨
+            </label>
+
+            <input
+              class="save"
+              id="levelA"
+              type="number"
+              value="1"
+              min="0"
+              step="1"
+            >
+
+          </div>
 
 
-          <input
-            type="radio"
-            name="direction"
-            id="dirBtoA"
-            value="BtoA"
-          />
+          <div class="field">
 
-          <label for="dirBtoA">
-            <span id="dirBtoAText">
-              B → A
-            </span>
-          </label>
+            <label for="weaponA">
+              무기 피해
+            </label>
+
+            <input
+              class="save"
+              id="weaponA"
+              type="number"
+              value="0"
+              min="0"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="successA">
+              성공률
+            </label>
+
+            <div class="input-wrap">
+
+              <input
+                class="save percent-input"
+                id="successA"
+                type="number"
+                value="100"
+                min="0"
+                max="100"
+                step="0.1"
+              >
+
+              <span class="suffix">
+                %
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label for="defenseA">
+              방어력
+            </label>
+
+            <input
+              class="save"
+              id="defenseA"
+              type="number"
+              value="0"
+              min="0"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="section-title"
+          style="margin-top:18px;"
+        >
+          내성 계수
+        </div>
+
+
+        <div class="resist-grid">
+
+          <div class="field">
+
+            <label>
+              병기
+            </label>
+
+            <input
+              class="save"
+              id="weaponResA"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              화기
+            </label>
+
+            <input
+              class="save"
+              id="fireResA"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              마법
+            </label>
+
+            <input
+              class="save"
+              id="magicResA"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              신성
+            </label>
+
+            <input
+              class="save"
+              id="holyResA"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
 
         </div>
 
       </div>
 
+    </article>
 
-      <div class="control-block">
+
+
+    <!-- B -->
+
+    <article class="card">
+
+      <div class="card-head">
+
+        <div class="badge">
+          B
+        </div>
+
+        <input
+          class="name-input save"
+          id="nameB"
+          type="text"
+          value="B"
+        >
+
+      </div>
+
+
+      <div class="card-body">
 
         <div class="section-title">
-          공격 속성
+          전투 수치
         </div>
 
-        <div class="segmented four">
 
-          <input
-            type="radio"
-            name="attackType"
-            id="typeWeapon"
-            value="weapon"
-            checked
-          />
+        <div class="field-grid">
 
-          <label for="typeWeapon">
-            병기
-          </label>
+          <div class="field">
 
+            <label>
+              레벨
+            </label>
 
-          <input
-            type="radio"
-            name="attackType"
-            id="typeFire"
-            value="fire"
-          />
+            <input
+              class="save"
+              id="levelB"
+              type="number"
+              value="1"
+              min="0"
+            >
 
-          <label for="typeFire">
-            화기
-          </label>
+          </div>
 
 
-          <input
-            type="radio"
-            name="attackType"
-            id="typeMagic"
-            value="magic"
-          />
+          <div class="field">
 
-          <label for="typeMagic">
-            마법
-          </label>
+            <label>
+              무기 피해
+            </label>
+
+            <input
+              class="save"
+              id="weaponB"
+              type="number"
+              value="0"
+              min="0"
+            >
+
+          </div>
 
 
-          <input
-            type="radio"
-            name="attackType"
-            id="typeHoly"
-            value="holy"
-          />
+          <div class="field">
 
-          <label for="typeHoly">
-            신성
-          </label>
+            <label>
+              성공률
+            </label>
+
+            <div class="input-wrap">
+
+              <input
+                class="save percent-input"
+                id="successB"
+                type="number"
+                value="100"
+                min="0"
+                max="100"
+                step="0.1"
+              >
+
+              <span class="suffix">
+                %
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              방어력
+            </label>
+
+            <input
+              class="save"
+              id="defenseB"
+              type="number"
+              value="0"
+              min="0"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="section-title"
+          style="margin-top:18px;"
+        >
+          내성 계수
+        </div>
+
+
+        <div class="resist-grid">
+
+          <div class="field">
+
+            <label>
+              병기
+            </label>
+
+            <input
+              class="save"
+              id="weaponResB"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              화기
+            </label>
+
+            <input
+              class="save"
+              id="fireResB"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              마법
+            </label>
+
+            <input
+              class="save"
+              id="magicResB"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              신성
+            </label>
+
+            <input
+              class="save"
+              id="holyResB"
+              type="number"
+              value="1.0"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
 
         </div>
 
       </div>
 
+    </article>
+
+  </section>
+
+
+
+  <!-- 공격 설정 -->
+
+  <section class="card controls">
+
+
+    <div class="control-block">
+
+      <div class="section-title">
+        공격 방향
+      </div>
+
+
+      <div class="segmented">
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="direction"
+          id="dirAtoB"
+          value="AtoB"
+          checked
+        >
+
+        <label for="dirAtoB">
+
+          <span id="dirAtoBText">
+            A → B
+          </span>
+
+        </label>
+
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="direction"
+          id="dirBtoA"
+          value="BtoA"
+        >
+
+        <label for="dirBtoA">
+
+          <span id="dirBtoAText">
+            B → A
+          </span>
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="control-block">
+
+      <div class="section-title">
+        공격 속성
+      </div>
+
+
+      <div class="segmented four">
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="attackType"
+          id="typeWeapon"
+          value="weapon"
+          checked
+        >
+
+        <label for="typeWeapon">
+          병기
+        </label>
+
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="attackType"
+          id="typeFire"
+          value="fire"
+        >
+
+        <label for="typeFire">
+          화기
+        </label>
+
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="attackType"
+          id="typeMagic"
+          value="magic"
+        >
+
+        <label for="typeMagic">
+          마법
+        </label>
+
+
+        <input
+          class="save-radio"
+          type="radio"
+          name="attackType"
+          id="typeHoly"
+          value="holy"
+        >
+
+        <label for="typeHoly">
+          신성
+        </label>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- 고정 공격률 -->
+
+    <div class="control-block">
+
+      <div class="section-title">
+        공격률 · 고정
+      </div>
+
+
+      <div class="attack-rate">
+
+        <div class="rate">
+
+          <strong>
+            10%
+          </strong>
+
+          <span>
+            실패
+          </span>
+
+        </div>
+
+
+        <div class="rate">
+
+          <strong>
+            80%
+          </strong>
+
+          <span>
+            일반
+          </span>
+
+        </div>
+
+
+        <div class="rate">
+
+          <strong>
+            10%
+          </strong>
+
+          <span>
+            치명타 ×2
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="button-row">
 
       <button
         class="calculate"
         id="calculateBtn"
+        type="button"
       >
         계산하기
       </button>
 
-      <div
-        class="error"
-        id="errorMsg"
-      ></div>
 
-    </section>
+      <button
+        class="reset"
+        id="resetBtn"
+        type="button"
+      >
+        초기화
+      </button>
 
-
-    <!-- 결과 -->
-    <section class="result">
-
-      <div class="result-item">
-
-        <div class="result-label">
-          실제 피해
-        </div>
-
-        <div
-          class="result-value"
-          id="damageResult"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="result-item">
-
-        <div class="result-label">
-          성공률
-        </div>
-
-        <div
-          class="result-value"
-          id="successResult"
-        >
-          100%
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section
-      class="outcome"
-      id="outcomeResult"
-    >
-      판정 대기
-    </section>
-
-
-    <div class="tiny">
-      기본 피해 = 레벨 × 10
     </div>
 
-  </main>
+
+    <div
+      class="error"
+      id="errorMsg"
+    ></div>
+
+  </section>
 
 
-  <script>
 
-    const damageResult =
-      document.getElementById("damageResult");
+  <!-- 결과 -->
 
-    const successResult =
-      document.getElementById("successResult");
+  <section class="result">
 
-    const outcomeResult =
-      document.getElementById("outcomeResult");
+    <div class="result-item">
 
-    const errorMsg =
-      document.getElementById("errorMsg");
+      <div class="result-label">
+        실제 피해
+      </div>
+
+      <div
+        class="result-value"
+        id="damageResult"
+      >
+        0
+      </div>
+
+    </div>
 
 
-    function getValue(id, fallback = 0) {
+    <div class="result-item">
 
-      const input =
-        document.getElementById(id);
+      <div class="result-label">
+        성공률
+      </div>
 
-      const raw =
-        input.value.trim();
+      <div
+        class="result-value"
+        id="successResult"
+      >
+        100%
+      </div>
 
-      if (raw === "") {
-        return fallback;
+    </div>
+
+  </section>
+
+
+
+  <section
+    class="outcome"
+    id="outcomeResult"
+  >
+    판정 대기
+  </section>
+
+
+  <div class="tiny">
+
+    기본 피해 = 레벨 × 10<br>
+
+    성공률 통과 후 공격률 판정 · 실패 10% / 일반 80% / 치명타 10%
+
+  </div>
+
+</main>
+
+
+
+<script>
+
+  const STORAGE_KEY =
+    "nnbBattleCalculatorV4";
+
+
+  const damageResult =
+    document.getElementById("damageResult");
+
+  const successResult =
+    document.getElementById("successResult");
+
+  const outcomeResult =
+    document.getElementById("outcomeResult");
+
+  const errorMsg =
+    document.getElementById("errorMsg");
+
+
+
+  /*
+    공정한 0 ~ 100 난수
+
+    가능하면 브라우저의
+    crypto API를 사용하고,
+
+    지원하지 않는 환경에서는
+    Math.random 사용
+  */
+
+  function randomPercent() {
+
+    if (
+      window.crypto &&
+      window.crypto.getRandomValues
+    ) {
+
+      const array =
+        new Uint32Array(1);
+
+      crypto.getRandomValues(array);
+
+      return (
+        array[0] /
+        4294967296
+      ) * 100;
+
+    }
+
+
+    return Math.random() * 100;
+
+  }
+
+
+
+  function numberValue(
+    id,
+    fallback = 0
+  ) {
+
+    const raw =
+      document
+        .getElementById(id)
+        .value
+        .trim();
+
+
+    if (raw === "") {
+
+      return fallback;
+
+    }
+
+
+    const number =
+      Number(raw);
+
+
+    return Number.isFinite(number)
+      ? number
+      : NaN;
+
+  }
+
+
+
+  function getCharacter(key) {
+
+    return {
+
+      level:
+        numberValue(
+          `level${key}`
+        ),
+
+      weaponDamage:
+        numberValue(
+          `weapon${key}`
+        ),
+
+      success:
+        numberValue(
+          `success${key}`,
+          100
+        ),
+
+      defense:
+        numberValue(
+          `defense${key}`
+        ),
+
+      resist: {
+
+        weapon:
+          numberValue(
+            `weaponRes${key}`,
+            1
+          ),
+
+        fire:
+          numberValue(
+            `fireRes${key}`,
+            1
+          ),
+
+        magic:
+          numberValue(
+            `magicRes${key}`,
+            1
+          ),
+
+        holy:
+          numberValue(
+            `holyRes${key}`,
+            1
+          )
+
       }
 
-      return Number(raw);
-    }
+    };
+
+  }
 
 
-    function getCharacter(key) {
 
-      return {
+  function validateCharacter(
+    character,
+    name
+  ) {
 
-        level:
-          getValue(`level${key}`),
+    const values = [
 
-        weaponDamage:
-          getValue(`weapon${key}`),
+      character.level,
 
-        success:
-          getValue(`success${key}`, 100),
+      character.weaponDamage,
 
-        defense:
-          getValue(`defense${key}`),
+      character.success,
 
-        resist: {
+      character.defense,
 
-          weapon:
-            getValue(`weaponRes${key}`, 1),
+      ...Object.values(
+        character.resist
+      )
 
-          fire:
-            getValue(`fireRes${key}`, 1),
-
-          magic:
-            getValue(`magicRes${key}`, 1),
-
-          holy:
-            getValue(`holyRes${key}`, 1)
-
-        }
-
-      };
-
-    }
+    ];
 
 
-    function formatNumber(number) {
+    if (
+      values.some(
+        Number.isNaN
+      )
+    ) {
 
-      if (Number.isInteger(number)) {
-
-        return number.toLocaleString("ko-KR");
-
-      }
-
-      return Number(
-        number.toFixed(2)
-      ).toLocaleString("ko-KR");
+      throw new Error(
+        `${name}의 입력값을 확인해줘.`
+      );
 
     }
 
 
-    function calculate() {
+    if (
+      character.level < 0
+    ) {
 
-      errorMsg.textContent = "";
+      throw new Error(
+        `${name}의 레벨은 0 이상이어야 해.`
+      );
+
+    }
+
+
+    if (
+      character.weaponDamage < 0
+    ) {
+
+      throw new Error(
+        `${name}의 무기 피해는 0 이상이어야 해.`
+      );
+
+    }
+
+
+    if (
+      character.defense < 0
+    ) {
+
+      throw new Error(
+        `${name}의 방어력은 0 이상이어야 해.`
+      );
+
+    }
+
+
+    if (
+      character.success < 0 ||
+      character.success > 100
+    ) {
+
+      throw new Error(
+        `${name}의 성공률은 0~100 사이여야 해.`
+      );
+
+    }
+
+
+    if (
+      Object
+        .values(character.resist)
+        .some(value => value < 0)
+    ) {
+
+      throw new Error(
+        `${name}의 내성 계수는 0 이상이어야 해.`
+      );
+
+    }
+
+  }
+
+
+
+  function formatNumber(number) {
+
+    if (
+      Number.isInteger(number)
+    ) {
+
+      return number
+        .toLocaleString("ko-KR");
+
+    }
+
+
+    return Number(
+      number.toFixed(2)
+    ).toLocaleString("ko-KR");
+
+  }
+
+
+
+  function setOutcome(
+    type,
+    text,
+    damage
+  ) {
+
+    damageResult.textContent =
+      formatNumber(damage);
+
+
+    outcomeResult.textContent =
+      text;
+
+
+    outcomeResult.classList.remove(
+      "normal",
+      "critical",
+      "fail"
+    );
+
+
+    outcomeResult.classList.add(
+      type
+    );
+
+  }
+
+
+
+  function resetOutcome() {
+
+    damageResult.textContent =
+      "0";
+
+
+    outcomeResult.textContent =
+      "판정 대기";
+
+
+    outcomeResult.classList.remove(
+      "normal",
+      "critical",
+      "fail"
+    );
+
+  }
+
+
+
+  /*
+    실제 공격 판정
+  */
+
+  function calculate() {
+
+    try {
+
+      errorMsg.textContent =
+        "";
 
 
       const A =
         getCharacter("A");
 
+
       const B =
         getCharacter("B");
+
+
+      validateCharacter(
+        A,
+        "A"
+      );
+
+
+      validateCharacter(
+        B,
+        "B"
+      );
+
 
 
       const direction =
@@ -790,10 +1546,12 @@
         ).value;
 
 
+
       const attackType =
         document.querySelector(
           'input[name="attackType"]:checked'
         ).value;
+
 
 
       const attacker =
@@ -802,40 +1560,71 @@
           : B;
 
 
+
       const defender =
         direction === "AtoB"
           ? B
           : A;
 
 
-      /*
-        기본 피해
 
-        LV 1 = 10
-        LV 2 = 20
-        LV 3 = 30
-        ...
+      successResult.textContent =
+        `${formatNumber(
+          attacker.success
+        )}%`;
+
+
+
+      /*
+        1단계
+        사용자 성공률 판정
+
+        예:
+        성공률 70%
+
+        70% -> 통과
+        30% -> 실패
       */
+
+      const successRoll =
+        randomPercent();
+
+
+
+      if (
+        successRoll >=
+        attacker.success
+      ) {
+
+        setOutcome(
+          "fail",
+          "공격 실패",
+          0
+        );
+
+
+        return;
+
+      }
+
+
+
+      /*
+        성공했을 경우
+        일반 피해량 계산
+      */
+
 
       const basicDamage =
         attacker.level * 10;
 
 
-      /*
-        기본 피해 + 무기 피해
-      */
 
       const rawDamage =
         basicDamage +
         attacker.weaponDamage;
 
 
-      /*
-        방어력 차감
-
-        피해보다 방어력이 높으면
-        최소 0
-      */
 
       const afterDefense =
         Math.max(
@@ -845,10 +1634,6 @@
         );
 
 
-      /*
-        상대의 해당 속성
-        내성 계수
-      */
 
       const resistance =
         defender.resist[
@@ -856,154 +1641,522 @@
         ];
 
 
-      /*
-        공격 성공 시 들어갈 피해
-      */
 
-      const successDamage =
+      const normalDamage =
         afterDefense *
         resistance;
 
 
-      /*
-        성공률 판정
-
-        예:
-
-        성공률 70
-        랜덤값 0~100
-
-        70 미만이면 성공
-      */
-
-      const roll =
-        Math.random() * 100;
-
-
-      const succeeded =
-        roll <
-        attacker.success;
-
 
       /*
-        성공 = 정상 피해
-        실패 = 0 피해
+        2단계
+        고정 공격률
+
+        0 ~ 10
+        실패 10%
+
+        10 ~ 90
+        일반 80%
+
+        90 ~ 100
+        치명타 10%
       */
 
-      const actualDamage =
-        succeeded
-          ? successDamage
-          : 0;
+      const attackRoll =
+        randomPercent();
 
 
-      damageResult.textContent =
-        formatNumber(
-          actualDamage
+
+      if (
+        attackRoll < 10
+      ) {
+
+        setOutcome(
+          "fail",
+          "공격 실패",
+          0
         );
 
 
-      successResult.textContent =
-        `${formatNumber(
-          attacker.success
-        )}%`;
-
-
-      if (succeeded) {
-
-        outcomeResult.textContent =
-          "공격 성공";
-
-        outcomeResult.classList.remove(
-          "fail"
-        );
-
-        outcomeResult.classList.add(
-          "success"
-        );
+        return;
 
       }
 
-      else {
 
-        outcomeResult.textContent =
-          "공격 실패";
 
-        outcomeResult.classList.remove(
-          "success"
+      if (
+        attackRoll < 90
+      ) {
+
+        setOutcome(
+          "normal",
+          "일반 공격",
+          normalDamage
         );
 
-        outcomeResult.classList.add(
-          "fail"
-        );
+
+        return;
 
       }
 
-    }
 
 
-    function updateDirectionNames() {
+      /*
+        치명타
+        최종 피해 ×2
+      */
 
-      const nameA =
-        document
-          .getElementById("nameA")
-          .value
-          .trim() || "A";
-
-
-      const nameB =
-        document
-          .getElementById("nameB")
-          .value
-          .trim() || "B";
-
-
-      document
-        .getElementById(
-          "dirAtoBText"
-        )
-        .textContent =
-          `${nameA} → ${nameB}`;
-
-
-      document
-        .getElementById(
-          "dirBtoAText"
-        )
-        .textContent =
-          `${nameB} → ${nameA}`;
-
-    }
-
-
-    document
-      .getElementById("nameA")
-      .addEventListener(
-        "input",
-        updateDirectionNames
+      setOutcome(
+        "critical",
+        "치명타!",
+        normalDamage * 2
       );
 
 
-    document
-      .getElementById("nameB")
-      .addEventListener(
-        "input",
-        updateDirectionNames
-      );
+    }
+
+    catch (error) {
+
+      errorMsg.textContent =
+        error.message;
+
+    }
+
+  }
+
+
+
+  /*
+    캐릭터 이름을
+    공격 방향 버튼에 반영
+  */
+
+  function updateNames() {
+
+    const nameA =
+      document
+        .getElementById("nameA")
+        .value
+        .trim()
+      || "A";
+
+
+    const nameB =
+      document
+        .getElementById("nameB")
+        .value
+        .trim()
+      || "B";
 
 
     document
       .getElementById(
-        "calculateBtn"
+        "dirAtoBText"
       )
-      .addEventListener(
-        "click",
-        calculate
+      .textContent =
+        `${nameA} → ${nameB}`;
+
+
+    document
+      .getElementById(
+        "dirBtoAText"
+      )
+      .textContent =
+        `${nameB} → ${nameA}`;
+
+  }
+
+
+
+  /*
+    현재 공격자의 성공률을
+    결과창에 미리 표시
+  */
+
+  function updateSuccessDisplay() {
+
+    const direction =
+      document.querySelector(
+        'input[name="direction"]:checked'
+      ).value;
+
+
+    const attacker =
+      direction === "AtoB"
+        ? "A"
+        : "B";
+
+
+    const value =
+      numberValue(
+        `success${attacker}`,
+        100
       );
 
 
-    updateDirectionNames();
+    if (
+      Number.isFinite(value)
+    ) {
 
-  </script>
+      successResult.textContent =
+        `${formatNumber(value)}%`;
+
+    }
+
+    else {
+
+      successResult.textContent =
+        "-";
+
+    }
+
+  }
+
+
+
+  /*
+    입력값 자동 저장
+  */
+
+  function saveState() {
+
+    const data = {};
+
+
+    document
+      .querySelectorAll(".save")
+      .forEach(input => {
+
+        data[input.id] =
+          input.value;
+
+      });
+
+
+
+    data.direction =
+      document.querySelector(
+        'input[name="direction"]:checked'
+      ).value;
+
+
+
+    data.attackType =
+      document.querySelector(
+        'input[name="attackType"]:checked'
+      ).value;
+
+
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(data)
+    );
+
+  }
+
+
+
+  /*
+    저장된 입력값 불러오기
+  */
+
+  function loadState() {
+
+    const raw =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
+
+    if (!raw) {
+
+      return;
+
+    }
+
+
+    try {
+
+      const data =
+        JSON.parse(raw);
+
+
+
+      document
+        .querySelectorAll(".save")
+        .forEach(input => {
+
+          if (
+            data[input.id] !==
+            undefined
+          ) {
+
+            input.value =
+              data[input.id];
+
+          }
+
+        });
+
+
+
+      if (data.direction) {
+
+        const radio =
+          document.querySelector(
+            `input[name="direction"][value="${data.direction}"]`
+          );
+
+
+        if (radio) {
+
+          radio.checked =
+            true;
+
+        }
+
+      }
+
+
+
+      if (data.attackType) {
+
+        const radio =
+          document.querySelector(
+            `input[name="attackType"][value="${data.attackType}"]`
+          );
+
+
+        if (radio) {
+
+          radio.checked =
+            true;
+
+        }
+
+      }
+
+    }
+
+    catch {
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
+    }
+
+  }
+
+
+
+  /*
+    초기화
+  */
+
+  function resetCalculator() {
+
+    const defaults = {
+
+      nameA: "A",
+      levelA: "1",
+      weaponA: "0",
+      successA: "100",
+      defenseA: "0",
+
+      weaponResA: "1.0",
+      fireResA: "1.0",
+      magicResA: "1.0",
+      holyResA: "1.0",
+
+
+      nameB: "B",
+      levelB: "1",
+      weaponB: "0",
+      successB: "100",
+      defenseB: "0",
+
+      weaponResB: "1.0",
+      fireResB: "1.0",
+      magicResB: "1.0",
+      holyResB: "1.0"
+
+    };
+
+
+    Object.entries(
+      defaults
+    ).forEach(
+      ([id, value]) => {
+
+        document
+          .getElementById(id)
+          .value =
+            value;
+
+      }
+    );
+
+
+    document
+      .getElementById(
+        "dirAtoB"
+      )
+      .checked =
+        true;
+
+
+    document
+      .getElementById(
+        "typeWeapon"
+      )
+      .checked =
+        true;
+
+
+    localStorage.removeItem(
+      STORAGE_KEY
+    );
+
+
+    updateNames();
+
+    updateSuccessDisplay();
+
+    resetOutcome();
+
+    errorMsg.textContent =
+      "";
+
+  }
+
+
+
+  /*
+    입력 변경
+  */
+
+  document
+    .querySelectorAll(".save")
+    .forEach(input => {
+
+      input.addEventListener(
+        "input",
+        () => {
+
+          saveState();
+
+          updateNames();
+
+          updateSuccessDisplay();
+
+          resetOutcome();
+
+        }
+      );
+
+    });
+
+
+
+  /*
+    공격 방향 / 속성 변경
+  */
+
+  document
+    .querySelectorAll(
+      ".save-radio"
+    )
+    .forEach(input => {
+
+      input.addEventListener(
+        "change",
+        () => {
+
+          saveState();
+
+          updateSuccessDisplay();
+
+          resetOutcome();
+
+        }
+      );
+
+    });
+
+
+
+  /*
+    계산 버튼
+  */
+
+  document
+    .getElementById(
+      "calculateBtn"
+    )
+    .addEventListener(
+      "click",
+      calculate
+    );
+
+
+
+  /*
+    초기화 버튼
+  */
+
+  document
+    .getElementById(
+      "resetBtn"
+    )
+    .addEventListener(
+      "click",
+      resetCalculator
+    );
+
+
+
+  /*
+    Enter 키 계산
+  */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" &&
+        event.target.matches("input")
+      ) {
+
+        event.preventDefault();
+
+        calculate();
+
+      }
+
+    }
+  );
+
+
+
+  /*
+    최초 실행
+  */
+
+  loadState();
+
+  updateNames();
+
+  updateSuccessDisplay();
+
+  resetOutcome();
+
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
